@@ -1,9 +1,10 @@
 import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 
+const isPublicRoute = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)'])
 const isProtectedRoute = createRouteMatcher(["/settings(.*)"])
 
 export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) auth().protect();
+  if (!isPublicRoute(req) && isProtectedRoute(req)) auth().protect();
 })
 
 export const config = {

@@ -1,9 +1,12 @@
-import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut } from "@clerk/nextjs"
+import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, UserButton } from "@clerk/nextjs"
 import Link from "next/link"
-import { IoIosPeople } from "react-icons/io"
+import { IoIosPeople, IoMdNotificationsOutline } from "react-icons/io"
 import { IoHomeOutline } from "react-icons/io5"
 import { MdOutlineHistory } from "react-icons/md"
 import MobileMenu from "./MobileMenu"
+import { GoPeople } from "react-icons/go"
+import { AiOutlineMessage } from "react-icons/ai"
+import { FaRegCircleUser } from "react-icons/fa6"
 
 const Navbar = () => {
   return (
@@ -45,8 +48,24 @@ const Navbar = () => {
           </div>
         </ClerkLoading>
         <ClerkLoaded>
-          <SignedIn>Signed in</SignedIn>
-          <SignedOut>Signed out</SignedOut>
+          <SignedIn>
+            <div className="cursor-pointer">
+              <GoPeople width={20} height={20} />
+            </div>
+            <div className="cursor-pointer">
+              <AiOutlineMessage width={20} height={20} />
+            </div>
+            <div className="cursor-pointer">
+              <IoMdNotificationsOutline width={20} height={20} />
+            </div>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <div className="flex items-center gap-2">
+              <FaRegCircleUser width={20} height={20} />
+              <Link href="/sign-in">Login/Register</Link>
+            </div>
+          </SignedOut>
         </ClerkLoaded>
         <MobileMenu />
       </div>
