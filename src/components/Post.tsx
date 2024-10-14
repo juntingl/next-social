@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { IoIosMore } from 'react-icons/io'
+import Comments from './Comments'
 
 const Post = () => {
   return (
@@ -7,7 +8,7 @@ const Post = () => {
       {/* User */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Image src="https://images.pexels.com/photos/28319901/pexels-photo-28319901.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" width={10} height={10} className="w-10 h-10 rounded-full" />
+          <Image src="https://images.pexels.com/photos/28319901/pexels-photo-28319901.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="" width={40} height={40} className="w-10 h-10 rounded-full" />
           <span className="font-medium">Jack MaBride</span>
         </div>
         <IoIosMore width={16} height={16} />
@@ -20,7 +21,7 @@ const Post = () => {
         <p>Success is not a destination, but a journey fueled by passion and persistence. Every step forward, no matter how small, brings you closer to your dreams. Along the way, remember to take care of your mind and body, for they are the vessels that carry you through life’s challenges. Don’t let setbacks define you; let them refine you. Keep pushing, stay focused, and never lose sight of the life you’re working to create. Your future self will thank you for every effort you make today.</p>
       </div>
       {/* Interaction */}
-      <div className="flex items-center justify-between text-sm">
+      <div className="flex items-center justify-between text-sm my-4">
         <div className="flex gap-8">
           <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-lg">
             <Image src="/like.png" alt="" width={16} height={16} className='cursor-pointer' />
@@ -47,6 +48,8 @@ const Post = () => {
           </div>
         </div>
       </div>
+      {/* Comments */}
+      <Comments />
     </div>
   )
 }
