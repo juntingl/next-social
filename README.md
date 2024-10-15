@@ -10,6 +10,5 @@
 - React19
 - TypeScript5
 - TailwindCSS
--
 - Clerk(Auth、User management)
 -
