@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "db:generate": "prisma migrate dev",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
@@ -10,6 +14,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^5.7.2",
+    "@prisma/client": "5.21.0",
     "babel-plugin-react-compiler": "^0.0.0-experimental-938cd9a-20240601",
     "next": "15.0.0-rc.0",
     "react": "19.0.0-rc-f994737d14-20240522",
