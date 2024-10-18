@@ -1,6 +1,11 @@
 import Image from 'next/image'
 
 const AddPost = () => {
+
+  const addPostAction = async () => {
+    "use server"
+  }
+
   return (
     <div className="p-4 shadow-md bg-white rounded-lg flex gap-4 justify-between text-sm">
       {/* Avatar */}
@@ -10,10 +15,11 @@ const AddPost = () => {
       {/* Post */}
       <div className="flex-1">
         {/* Text Input */}
-        <div className="flex gap-4">
-          <textarea name="" id="" placeholder="What's on your mind?" className='flex-1 bg-slate-100 rounded-lg p-2'></textarea>
+        <form action={addPostAction} className="flex gap-4">
+          <textarea name="desc" id="" placeholder="What's on your mind?" className='flex-1 bg-slate-100 rounded-lg p-2'></textarea>
           <Image src="/emoji.png" alt="" width={20} height={20} className='w-5 h-5 cursor-pointer' />
-        </div>
+          button.
+        </form>
         {/* Post Options */}
         <div className="flex items-center gap-4 mt-4 text-gray-400">
           <div className="flex items-center gap-2 cursor-pointer">

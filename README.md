@@ -11,7 +11,7 @@
 - TypeScript5
 - TailwindCSS
 - Clerk(Auth、User management)
--
+- svix (本地开发时，使用 webhooks 同步用户数据到本地数据时需要进行一些配置（ngrok 本地代理一个域名服务到 clerk）)
 
 ### 启动项目
 
