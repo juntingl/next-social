@@ -67,7 +67,7 @@ const ProfileCard = async () => {
             {user._count.followers} Followers
           </span>
         </div>
-        <Link href="/">
+        <Link href={`/profile/${user.username}`}>
           <button className="bg-blue-500 text-white text-xs p-2 rounded-md">
             My Profile
           </button>
