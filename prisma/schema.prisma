@@ -76,8 +76,10 @@ model Like {
 model Follower {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
+  // 用户的关注者
   follower    User     @relation("UserFollowers", fields: [followerId], references: [id], onDelete: Cascade)
   followerId  String
+  // 用户的关注对象
   following   User     @relation("UserFollowings", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String
 }

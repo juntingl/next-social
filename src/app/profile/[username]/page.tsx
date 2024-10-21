@@ -5,6 +5,7 @@ import LeftMenu from "@/components/LeftMenu"
 import RightMenu from "@/components/RightMenu"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
+import { auth } from "@clerk/nextjs/server"
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   if (!params.username) return null
@@ -25,6 +26,25 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
   })
 
   if (!user) return notFound()
+
+  // 阻止访问主页
+  const { userId: currentUserId } = auth()
+
+  let isBlocked;
+
+  if (currentUserId) {
+    const res = await prisma.block.findFirst({
+      where: {
+        blockerId: user.id,
+        blockedId: currentUserId
+      }
+    })
+    if (res) isBlocked = true;
+  } else {
+    isBlocked = false
+  }
+
+  if (isBlocked) return notFound()
 
   return (
     <div className="flex gap-6 pt-6">
