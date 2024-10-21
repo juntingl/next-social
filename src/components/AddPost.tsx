@@ -18,7 +18,6 @@ const AddPost = () => {
         <form action={addPostAction} className="flex gap-4">
           <textarea name="desc" id="" placeholder="What's on your mind?" className='flex-1 bg-slate-100 rounded-lg p-2'></textarea>
           <Image src="/emoji.png" alt="" width={20} height={20} className='w-5 h-5 cursor-pointer' />
-          button.
         </form>
         {/* Post Options */}
         <div className="flex items-center gap-4 mt-4 text-gray-400">

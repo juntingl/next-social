@@ -16,25 +16,28 @@
 ### 启动项目
 
 1. 创建 `.env` 文件
+    项目环境配置文件，创建该文件后，根据你电脑环境的相关配置进行配置。
 
-项目环境配置文件，创建该文件后，根据你电脑环境的相关配置进行配置。
+    ```bash
+    cp .env.example .env
+    ```
 
-```bash
-cp .env.example .env
-```
+2. start docker
 
-1. start docker
+    本项目数据服务采用 `docker` 进行托管，所以确保你的电脑已经安装好了 `docker`， 这里提供了一个脚本（`start-database.sh`）进行创建和运行所需的 `docker` 容器。
 
-本项目数据服务采用 `docker` 进行托管，所以确保你的电脑已经安装好了 `docker`， 这里提供了一个脚本（`start-database.sh`）进行创建和运行所需的 `docker` 容器。
+    ```bash
+    ./start-database.sh
+    ```
 
-```bash
-./start-database.sh
-```
+3. init db
 
-2. init db
+    > 首次启动项目才需要执行此命令
 
-> 首次启动项目才需要执行此命令
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
-```bash
-npx prisma migrate dev --name init
-```
+4. update db
+
+    当改变表结构（`schema.prisma`）时，需要执行更新命令，不同更新 MYSQL。
