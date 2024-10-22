@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import Feed from "@/components/Feed"
+import Feed from "@/components/feed/Feed"
 import LeftMenu from "@/components/LeftMenu"
 import RightMenu from "@/components/RightMenu"
 import prisma from "@/lib/prisma"
