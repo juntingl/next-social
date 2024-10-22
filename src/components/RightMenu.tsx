@@ -5,7 +5,7 @@ import FriendRequests from "./FriendRequests"
 import UserInfoCard from "./UserInfoCard"
 import UserMediaCard from "./UserMediaCard"
 import { Suspense } from "react"
-import Skeleton from "./Skeleton"
+import Skeleton, { UserMediaCardSkeleton } from "./Skeleton"
 
 const RightMenu = ({ user }: { user?: User }) => {
   return (
@@ -14,7 +14,9 @@ const RightMenu = ({ user }: { user?: User }) => {
         <Suspense fallback={<Skeleton />}>
           <UserInfoCard user={user} />
         </Suspense>
-        <UserMediaCard user={user} />
+        <Suspense fallback={<UserMediaCardSkeleton />}>
+          <UserMediaCard user={user} />
+        </Suspense>
       </>) : null}
       <FriendRequests />
       <Birthdays />
