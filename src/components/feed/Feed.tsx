@@ -32,12 +32,13 @@ const Feed = async ({ username }: { username?: string }) => {
       }
     })
   }
-  console.log(posts);
 
   if (!userId) return null
   return (
     <div className="p-4 shadow-md bg-white rounded-lg flex flex-col gap-12">
-      <Post />
+      {posts.length ? (
+        posts.map(post => <Post key={post.id} post={post} />)
+      ) : "No posts yet"}
     </div>
   )
 }
