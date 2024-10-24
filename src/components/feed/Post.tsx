@@ -1,4 +1,3 @@
-"use client";
 import type { User, Post as PostType } from '@prisma/client';
 import Image from 'next/image';
 import { IoIosMore } from 'react-icons/io';
@@ -58,7 +57,9 @@ const Post = ({ post }: { post: FeedPostType }) => {
         />
       </Suspense>
       {/* Comments */}
-      <Comments />
+      <Suspense fallback={"Loading...."}>
+        <Comments postId={post.id} />
+      </Suspense>
     </div>
   )
 }

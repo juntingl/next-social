@@ -1,6 +1,7 @@
 "use server"
 
 import prisma from "@/lib/prisma"
+import { addCommentZodSchema, AddCommentZodSchemaType } from "@/schema/comment"
 import { addPostZodSchema, AddPostZodSchemaType } from "@/schema/post"
 import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
@@ -32,7 +33,6 @@ export const addPost = async (data: AddPostZodSchemaType) => {
     }
   }
 }
-
 
 export const switchLike = async (postId: number) => {
   const { userId } = auth();
@@ -67,6 +67,40 @@ export const switchLike = async (postId: number) => {
     return {
       success: false,
       error: 'Failed to switch like'
+    }
+  }
+}
+
+export const addComment = async(data: AddCommentZodSchemaType) => {
+  const { userId } = auth();
+  if (!userId) throw new Error("User is not authenticated")
+  const result = addCommentZodSchema.safeParse(data);
+
+  if (!result.success) {
+    return {
+      success: false,
+      error: 'Invalid form data'
+    }
+  }
+
+  try {
+    const createComment =  await prisma.comment.create({
+      data: {
+        ...data,
+        userId
+      },
+      include: {
+        user: true
+      }
+    })
+    return {
+      success: true,
+      data: createComment
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Failed to add comment'
     }
   }
 }
