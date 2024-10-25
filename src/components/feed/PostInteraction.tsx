@@ -1,5 +1,6 @@
 
 "use client";
+
 import { switchLike } from '@/actions';
 import { useAuth } from '@clerk/nextjs';
 import Image from 'next/image';
