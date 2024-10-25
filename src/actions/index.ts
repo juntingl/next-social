@@ -7,7 +7,7 @@ import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
 
 export const addPost = async (data: AddPostZodSchemaType) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) throw new Error("User is not authenticated")
   const result = addPostZodSchema.safeParse(data);
   if (!result.success) {
@@ -35,7 +35,7 @@ export const addPost = async (data: AddPostZodSchemaType) => {
 }
 
 export const switchLike = async (postId: number) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) throw new Error("User is not authenticated")
 
   try {
@@ -72,7 +72,7 @@ export const switchLike = async (postId: number) => {
 }
 
 export const addComment = async(data: AddCommentZodSchemaType) => {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) throw new Error("User is not authenticated")
   const result = addCommentZodSchema.safeParse(data);
 

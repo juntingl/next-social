@@ -29,7 +29,7 @@ const ProfilePage = async (props: { params: Promise<{ username: string }> }) => 
   if (!user) return notFound()
 
   // 阻止访问主页
-  const { userId: currentUserId } = auth()
+  const { userId: currentUserId } = await auth()
 
   let isBlocked;
 

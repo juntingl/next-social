@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server"
 import Post from "./Post"
 
 const Feed = async ({ username }: { username?: string }) => {
-  const { userId } = auth()
+  const { userId } = await auth()
 
   let posts: any[] = []
 
