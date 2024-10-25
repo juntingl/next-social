@@ -34,6 +34,26 @@ export const addPost = async (data: AddPostZodSchemaType) => {
   }
 }
 
+export const deletePost = async (postId: number) => {
+  const { userId } = await auth();
+  if (!userId) throw new Error("User is not authenticated")
+
+  try {
+    await prisma.post.delete({
+      where: {
+        id: postId,
+        userId
+      }
+    })
+    revalidatePath('/');
+  } catch(error) {
+    return {
+      success: false,
+      error: 'Failed to delete post'
+    }
+  }
+}
+
 export const switchLike = async (postId: number) => {
   const { userId } = await auth();
   if (!userId) throw new Error("User is not authenticated")

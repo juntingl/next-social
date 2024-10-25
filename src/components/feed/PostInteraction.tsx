@@ -82,7 +82,7 @@ const PostInteraction = ({
           <Image src="/share.png" alt="" width={16} height={16} className='cursor-pointer' />
           <span className='text-gray-300'>|</span>
           <span className="text-gray-500">
-            88<span className='hidden md:inline'> Shares</span>
+            0<span className='hidden md:inline'> Shares</span>
           </span>
         </div>
       </div>

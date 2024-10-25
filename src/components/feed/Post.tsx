@@ -1,9 +1,10 @@
-import type { User, Post as PostType } from '@prisma/client';
+import { auth } from '@clerk/nextjs/server';
+import type { Post as PostType, User } from '@prisma/client';
 import Image from 'next/image';
-import { IoIosMore } from 'react-icons/io';
-import Comments from './Comments';
-import PostInteraction from './PostInteraction';
 import { Suspense } from 'react';
+import Comments from './Comments';
+import PostInfo from './PostInfo';
+import PostInteraction from './PostInteraction';
 
 type FeedPostType = PostType & { user: User } & {
   likes: [{ userId: string }];
@@ -11,7 +12,9 @@ type FeedPostType = PostType & { user: User } & {
   _count: { comments: number };
 };
 
-const Post = ({ post }: { post: FeedPostType }) => {
+const Post = async ({ post }: { post: FeedPostType }) => {
+  const { userId } = await auth();
+
   return (
     <div className="flex flex-col gap-4">
       {/* User */}
@@ -31,7 +34,7 @@ const Post = ({ post }: { post: FeedPostType }) => {
             }
           </span>
         </div>
-        <IoIosMore width={16} height={16} />
+        {post.user.id === userId && <PostInfo postId={post.id} />}
       </div>
       {/* Desc */}
       <div className="flex flex-col gap-4">
