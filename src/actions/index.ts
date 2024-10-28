@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma"
 import { addCommentZodSchema, AddCommentZodSchemaType } from "@/schema/comment"
 import { addPostZodSchema, AddPostZodSchemaType } from "@/schema/post"
+import { switchFollowZodSchema } from "@/schema/user"
 import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
 
@@ -46,7 +47,7 @@ export const deletePost = async (postId: number) => {
       }
     })
     revalidatePath('/');
-  } catch(error) {
+  } catch (error) {
     return {
       success: false,
       error: 'Failed to delete post'
@@ -91,7 +92,7 @@ export const switchLike = async (postId: number) => {
   }
 }
 
-export const addComment = async(data: AddCommentZodSchemaType) => {
+export const addComment = async (data: AddCommentZodSchemaType) => {
   const { userId } = await auth();
   if (!userId) throw new Error("User is not authenticated")
   const result = addCommentZodSchema.safeParse(data);
@@ -104,7 +105,7 @@ export const addComment = async(data: AddCommentZodSchemaType) => {
   }
 
   try {
-    const createComment =  await prisma.comment.create({
+    const createComment = await prisma.comment.create({
       data: {
         ...data,
         userId
@@ -121,6 +122,100 @@ export const addComment = async(data: AddCommentZodSchemaType) => {
     return {
       success: false,
       error: 'Failed to add comment'
+    }
+  }
+}
+
+export const switchFollow = async (userId: string) => {
+  const { userId: currentUserId } = await auth();
+
+  if (!currentUserId) throw new Error("User is not authenticated")
+  const result = switchFollowZodSchema.safeParse({ userId });
+
+  if (!result.success) {
+    return {
+      success: false,
+      error: 'Invalid form data，The userId field type is not a string.'
+    }
+  }
+
+  try {
+    const existingFollow = await prisma.follower.findFirst({
+      where: {
+        followerId: currentUserId,
+        followingId: userId,
+      }
+    });
+
+    if (existingFollow) {
+      // Unfollow
+      const res = await prisma.follower.delete({
+        where: {
+          id: existingFollow.id,
+        }
+      })
+      if (res) {
+        return {
+          success: true,
+          data: res,
+        }
+      } else {
+        return {
+          success: false,
+          error: 'Failed to unfollow'
+        }
+      }
+    } else {
+      const existingFollowRequest = await prisma.followRequest.findFirst({
+        where: {
+          senderId: currentUserId,
+          receiverId: userId,
+        }
+      })
+
+      if (existingFollowRequest) {
+        // Cancel follow request
+        const res = await prisma.followRequest.delete({
+          where: {
+            id: existingFollowRequest.id,
+          }
+        })
+        if (res) {
+          return {
+            success: true,
+            data: res,
+          }
+        } else {
+          return {
+            success: false,
+            error: 'Failed to cancel follow request'
+          }
+        }
+      } else {
+        // Send follow request
+        const res = await prisma.followRequest.create({
+          data: {
+            senderId: currentUserId,
+            receiverId: userId,
+          }
+        })
+        if (res) {
+          return {
+            success: true,
+            data: res,
+          }
+        } else {
+          return {
+            success: false,
+            error: 'Failed to send follow request'
+          }
+        }
+      }
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: 'Failed to switch follow'
     }
   }
 }

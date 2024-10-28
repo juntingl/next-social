@@ -99,19 +99,13 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             <span>Joined {formattedDate}</span>
           </div>
         </div>
-        <UserInfoInteraction
-          userId={user.id}
-          isUserBlocked={isUserBlocked}
-          isFollowing={isFollowing}
-          isFollowingSent={isFollowingSent}
-        />
         {currentUserId && (currentUserId !== user.id) && (
-          <>
-            <button className="bg-blue-500 text-white text-sm rounded-md p-2">
-              Follow
-            </button>
-            <span className="text-red-500 self-end text-xs cursor-pointer">Block User</span>
-          </>
+          <UserInfoInteraction
+            userId={user.id}
+            isUserBlocked={isUserBlocked}
+            isFollowing={isFollowing}
+            isFollowingSent={isFollowingSent}
+          />
         )}
       </div>
     </div>
