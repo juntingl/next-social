@@ -8,6 +8,7 @@ import { IoSchool } from "react-icons/io5"
 import { RxCalendar } from "react-icons/rx"
 import { TbBriefcaseFilled } from "react-icons/tb"
 import UserInfoInteraction from "./UserInfoInteraction"
+import UpdateUser from "./UpdateUser"
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const createdAtDate = new Date(user.createdAt)
@@ -53,7 +54,11 @@ const UserInfoCard = async ({ user }: { user: User }) => {
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">User Information</span>
-        <Link href="/" className="text-blue-500 text-xs">See all</Link>
+        {currentUserId === user.id ? (
+          <UpdateUser user={user} />
+        ) : (
+          <Link href="/" className="text-blue-500 text-xs">See all</Link>
+        )}
       </div>
       {/* Bottom */}
       <div className="flex flex-col gap-4 text-gray-500">
@@ -77,7 +82,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
         {user.school && (
           <div className="flex items-center gap-2">
             <IoSchool size={16} className="text-gray-400 w-4 h-4" />
-            <span>{user.school}</span>
+            <span>Went to <b>{user.school}</b></span>
           </div>
         )}
         {user.work && (
@@ -91,7 +96,9 @@ const UserInfoCard = async ({ user }: { user: User }) => {
           {user.website && (
             <div className="flex items-center gap-1">
               <IoIosLink size={16} className="text-gray-400 w-4 h-4" />
-              <Link href={user.website} className="text-blue-500">{user.website}</Link>
+              <Link href={user.website} className="text-blue-500">
+                {user.website}
+              </Link>
             </div>
           )}
           <div className="flex items-center gap-1">

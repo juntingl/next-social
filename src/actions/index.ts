@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma"
 import { addCommentZodSchema, AddCommentZodSchemaType } from "@/schema/comment"
 import { addPostZodSchema, AddPostZodSchemaType } from "@/schema/post"
-import { switchFollowZodSchema } from "@/schema/user"
+import { switchFollowZodSchema, updateProfileZodSchema, UpdateProfileZodSchemaType } from "@/schema/user"
 import { auth } from "@clerk/nextjs/server"
 import { revalidatePath } from "next/cache"
 
@@ -272,4 +272,55 @@ export const switchBlock = async (userId: string) => {
     } catch (error) {
       throw new Error("Failed to switch block");
     }
+}
+
+export const uploadProfile = async (
+  prevState: { success: boolean; msg: string; },
+  payload: { data: UpdateProfileZodSchemaType; }
+) => {
+  const { data } = payload;
+  const validatedResult = updateProfileZodSchema.safeParse(data);
+  if (!validatedResult.success) {
+    console.log("Field errors: ", validatedResult.error.flatten().fieldErrors)
+    return {
+      success: false,
+      msg: 'Invalid form data',
+    }
+  }
+
+  const { userId } = await auth()
+  if (!userId) {
+    return {
+      success: false,
+      msg: 'User is not authenticated',
+    }
+  }
+
+  try {
+    const res = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: validatedResult.data
+    })
+
+    if (res) {
+      return {
+        success: true,
+        msg: 'Profile updated successfully',
+      }
+    } else {
+      return {
+        success: false,
+        msg: 'Failed to update profile',
+      }
+    }
+  } catch (error) {
+    console.log("🚀 ~ error:", error)
+    return {
+      success: false,
+      msg: 'Failed to update profile',
+    }
+  }
+
 }
