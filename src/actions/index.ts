@@ -219,3 +219,57 @@ export const switchFollow = async (userId: string) => {
     }
   }
 }
+
+export const switchBlock = async (userId: string) => {
+  const { userId: currentUserId } = await auth();
+  if (!currentUserId) throw new Error("User is not authenticated")
+
+    try {
+      const existingBlock = await prisma.block.findFirst({
+        where: {
+          blockerId: currentUserId,
+          blockedId: userId
+        }
+      });
+      if (existingBlock) {
+        // Unblock
+        const res = await prisma.block.delete({
+          where: {
+            id: existingBlock.id,
+          }
+        })
+        if (res) {
+          return {
+            success: true,
+            data: res,
+          }
+        } else {
+          return {
+            success: false,
+            error: 'Failed to unblock'
+          }
+        }
+      } else {
+        // Block
+        const res = await prisma.block.create({
+          data: {
+            blockerId: currentUserId,
+            blockedId: userId,
+          }
+        })
+        if (res) {
+          return {
+            success: true,
+            data: res,
+          }
+        } else {
+          return {
+            success: false,
+            error: 'Failed to block'
+          }
+        }
+      }
+    } catch (error) {
+      throw new Error("Failed to switch block");
+    }
+}

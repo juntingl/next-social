@@ -1,6 +1,6 @@
 "use client"
 
-import { switchFollow } from "@/actions";
+import { switchBlock, switchFollow } from "@/actions";
 import { useOptimistic, useState } from "react"
 import { useToast } from "../Toast";
 
@@ -38,7 +38,7 @@ const UserInfoInteraction = ({
   const follow = async () => {
     switchOptimisticState("follow");
     try {
-      const res =  await switchFollow(userId);
+      const res = await switchFollow(userId);
       if (res.success) {
         showToast("Followed successfully")
         setUserState((prev) => ({
@@ -49,10 +49,28 @@ const UserInfoInteraction = ({
         }));
       } else {
         showToast(res.error!)
-        setUserState(() => ({...userState}));
+        setUserState(() => ({ ...userState }));
       }
     } catch (err) { }
   };
+
+  const block = async () => {
+    switchOptimisticState("block");
+    try {
+      const res = await switchBlock(userId);
+      if (res.success) {
+        showToast("Blocked successfully")
+        setUserState((prev) => ({
+          ...prev,
+          blocked: !prev.blocked,
+        }));
+      } else {
+        showToast(res.error!)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <>
@@ -65,8 +83,12 @@ const UserInfoInteraction = ({
               : 'Follow'}
         </button>
       </form>
-      <form action="" className="self-end">
-        <span className="text-red-500 text-xs cursor-pointer">Block User</span>
+      <form action={block} className="self-end">
+        <button>
+          <span className="text-red-500 text-xs cursor-pointer">
+            {optimisticState.blocked ? 'Unblock User' : 'Block User'}
+          </span>
+        </button>
       </form>
     </>
   )
