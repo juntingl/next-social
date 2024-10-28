@@ -2,7 +2,7 @@ import Image from "next/image"
 
 import Feed from "@/components/feed/Feed"
 import LeftMenu from "@/components/LeftMenu"
-import RightMenu from "@/components/RightMenu"
+import RightMenu from "@/components/rightMenu/RightMenu"
 import prisma from "@/lib/prisma"
 import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"

@@ -1,13 +1,13 @@
-import Link from "next/link"
-import Image from "next/image"
-import { FaMapMarkerAlt } from "react-icons/fa"
-import { IoSchool } from "react-icons/io5"
-import { TbBriefcaseFilled } from "react-icons/tb"
-import { IoIosLink } from "react-icons/io"
-import { RxCalendar } from "react-icons/rx"
-import { User } from "@prisma/client"
-import { auth } from "@clerk/nextjs/server"
 import prisma from "@/lib/prisma"
+import { auth } from "@clerk/nextjs/server"
+import { User } from "@prisma/client"
+import Link from "next/link"
+import { FaMapMarkerAlt } from "react-icons/fa"
+import { IoIosLink } from "react-icons/io"
+import { IoSchool } from "react-icons/io5"
+import { RxCalendar } from "react-icons/rx"
+import { TbBriefcaseFilled } from "react-icons/tb"
+import UserInfoInteraction from "./UserInfoInteraction"
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const createdAtDate = new Date(user.createdAt)
@@ -99,7 +99,12 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             <span>Joined {formattedDate}</span>
           </div>
         </div>
-
+        <UserInfoInteraction
+          userId={user.id}
+          isUserBlocked={isUserBlocked}
+          isFollowing={isFollowing}
+          isFollowingSent={isFollowingSent}
+        />
         {currentUserId && (currentUserId !== user.id) && (
           <>
             <button className="bg-blue-500 text-white text-sm rounded-md p-2">

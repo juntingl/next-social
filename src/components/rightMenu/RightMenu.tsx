@@ -5,7 +5,7 @@ import FriendRequests from "./FriendRequests"
 import UserInfoCard from "./UserInfoCard"
 import UserMediaCard from "./UserMediaCard"
 import { Suspense } from "react"
-import Skeleton, { UserMediaCardSkeleton } from "./Skeleton"
+import Skeleton, { UserMediaCardSkeleton } from "../Skeleton"
 
 const RightMenu = ({ user }: { user?: User }) => {
   return (
