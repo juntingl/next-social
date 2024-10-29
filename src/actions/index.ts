@@ -275,7 +275,7 @@ export const switchBlock = async (userId: string) => {
 }
 
 export const uploadProfile = async (
-  prevState: { success: boolean; msg: string; },
+  prevState: { success: boolean; msg: string; errors?: {} },
   payload: { data: UpdateProfileZodSchemaType; }
 ) => {
   const { data } = payload;
@@ -285,6 +285,7 @@ export const uploadProfile = async (
     return {
       success: false,
       msg: 'Invalid form data',
+      errors: validatedResult.error.flatten().fieldErrors
     }
   }
 

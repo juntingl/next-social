@@ -8,8 +8,8 @@ export type SwitchFollowZodSchemaType = z.infer<typeof switchFollowZodSchema>;
 
 export const updateProfileZodSchema = z.object({
   cover: z.string().optional(),
-  name: z.string().max(60).optional(),
-  surname: z.string().max(60).optional(),
+  name: z.string().min(3).max(60),
+  surname: z.string().min(1).max(60),
   description: z.string().max(255).optional(),
   city: z.string().optional(),
   school: z.string().max(60).optional(),

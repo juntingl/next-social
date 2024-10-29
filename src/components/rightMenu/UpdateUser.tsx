@@ -1,21 +1,20 @@
 
 "use client"
 
-import Image from "next/image";
-import { User } from "@prisma/client";
-import { CldUploadWidget } from "next-cloudinary";
-import { useActionState, useState } from "react";
-import UpdateButton from "./UpdateButton";
 import { uploadProfile } from "@/actions";
 import { mockImage } from "@/lib/mock";
-import { UpdateProfileZodSchemaType } from "@/schema/user";
-import { useToast } from "../Toast";
+import { User } from "@prisma/client";
+import { CldUploadWidget } from "next-cloudinary";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useActionState, useState } from "react";
+import { useToast } from "../Toast";
+import UpdateButton from "./UpdateButton";
 
 const UpdateUser = ({ user }: { user: User }) => {
   const [open, setOpen] = useState(false)
   const [cover, setCover] = useState("")
-  const [state, formAction, isPending] = useActionState(uploadProfile, { success: false, msg: "" });
+  const [state, formAction, isPending] = useActionState(uploadProfile, { success: false, msg: "", errors: undefined });
   const router = useRouter();
   const { showToast } = useToast()
 
@@ -26,13 +25,10 @@ const UpdateUser = ({ user }: { user: User }) => {
 
   const handleSubmit = (formData: FormData) => {
     const filteredFields = Object.fromEntries(
-      formData.entries().filter(([_, value]) => value !== "")
+      [...formData.entries(), ['cover', cover]].filter(([_, value]) => value !== "")
     );
-    const fields = {
-      ...filteredFields,
-      cover
-    };
-    formAction({ data: fields })
+    console.log("🚀 ~ handleSubmit ~ fields:", filteredFields)
+    formAction({ data: filteredFields })
     if (state.success) {
       showToast("Profile updated successfully!")
       setOpen(false)
@@ -162,7 +158,7 @@ const UpdateUser = ({ user }: { user: User }) => {
               {state.success && (
                 <span className="text-green-500">Profile has been updated!</span>
               )}
-              {!state.success && (
+              {!state.success && state.errors &&  (
                 <span className="text-red-500">Something went wrong.</span>
               )}
               <div
