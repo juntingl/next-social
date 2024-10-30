@@ -33,6 +33,7 @@ const UpdateUser = ({ user }: { user: User }) => {
       showToast("Profile updated successfully!")
       setOpen(false)
     } else {
+      console.log("Failed error information: ", state.errors);
       showToast("Something went wrong!")
     }
   }
