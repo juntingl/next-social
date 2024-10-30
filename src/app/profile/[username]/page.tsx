@@ -9,7 +9,6 @@ import { auth } from "@clerk/nextjs/server"
 
 const ProfilePage = async (props: { params: Promise<{ username: string }> }) => {
   const params = await props.params;
-  if (!params.username) return null
 
   const user = await prisma.user.findFirst({
     where: {
@@ -67,7 +66,7 @@ const ProfilePage = async (props: { params: Promise<{ username: string }> }) => 
               alt=""
               width={128}
               height={128}
-              className="absolute rounded-full w-32 h-32 left-0 right-0 m-auto -bottom-16 ring-1 ring-white z-10 object-cover"
+              className="absolute rounded-full w-32 h-32 left-0 right-0 m-auto -bottom-16 ring-1 ring-white object-cover"
             />
           </div>
           <h1 className="mt-20 mb-4 text-2xl font-medium">

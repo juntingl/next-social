@@ -126,6 +126,58 @@ export const addComment = async (data: AddCommentZodSchemaType) => {
   }
 }
 
+export const uploadProfile = async (
+  prevState: { success: boolean; msg: string; errors?: {} },
+  payload: { data: UpdateProfileZodSchemaType; }
+) => {
+  const { data } = payload;
+  const validatedResult = updateProfileZodSchema.safeParse(data);
+  if (!validatedResult.success) {
+    console.log("Field errors: ", validatedResult.error.flatten().fieldErrors)
+    return {
+      success: false,
+      msg: 'Invalid form data',
+      errors: validatedResult.error.flatten().fieldErrors
+    }
+  }
+
+  const { userId } = await auth()
+  if (!userId) {
+    return {
+      success: false,
+      msg: 'User is not authenticated',
+    }
+  }
+
+  try {
+    const res = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: validatedResult.data
+    })
+
+    if (res) {
+      return {
+        success: true,
+        msg: 'Profile updated successfully',
+      }
+    } else {
+      return {
+        success: false,
+        msg: 'Failed to update profile',
+      }
+    }
+  } catch (error) {
+    console.log("🚀 ~ error:", error)
+    return {
+      success: false,
+      msg: 'Failed to update profile',
+    }
+  }
+
+}
+
 export const switchFollow = async (userId: string) => {
   const { userId: currentUserId } = await auth();
 
@@ -274,54 +326,61 @@ export const switchBlock = async (userId: string) => {
     }
 }
 
-export const uploadProfile = async (
-  prevState: { success: boolean; msg: string; errors?: {} },
-  payload: { data: UpdateProfileZodSchemaType; }
-) => {
-  const { data } = payload;
-  const validatedResult = updateProfileZodSchema.safeParse(data);
-  if (!validatedResult.success) {
-    console.log("Field errors: ", validatedResult.error.flatten().fieldErrors)
-    return {
-      success: false,
-      msg: 'Invalid form data',
-      errors: validatedResult.error.flatten().fieldErrors
-    }
-  }
-
-  const { userId } = await auth()
-  if (!userId) {
-    return {
-      success: false,
-      msg: 'User is not authenticated',
-    }
+export const acceptFollowRequest = async (userId: string) => {
+  const { userId: currentUserId } = await auth()
+  if (!currentUserId) {
+    throw new Error("User is not Authenticated!");
   }
 
   try {
-    const res = await prisma.user.update({
+    const existingFollowRequest = await prisma.followRequest.findFirst({
       where: {
-        id: userId,
-      },
-      data: validatedResult.data
-    })
+        senderId: userId,
+        receiverId: currentUserId
+      }
+    });
 
-    if (res) {
-      return {
-        success: true,
-        msg: 'Profile updated successfully',
-      }
-    } else {
-      return {
-        success: false,
-        msg: 'Failed to update profile',
-      }
+    if (existingFollowRequest) {
+      await prisma.followRequest.delete({
+        where: {
+          id: existingFollowRequest.id
+        }
+      })
+
+      await prisma.follower.create({
+        data: {
+          followerId: userId,
+          followingId: currentUserId
+        }
+      })
     }
   } catch (error) {
-    console.log("🚀 ~ error:", error)
-    return {
-      success: false,
-      msg: 'Failed to update profile',
-    }
+    throw new Error("Something went wrong");
+  }
+}
+
+export const declineFollowRequest = async (userId: string) => {
+  const { userId: currentUserId } = await auth()
+  if (!currentUserId) {
+    throw new Error("User is not Authenticated!");
   }
 
+  try {
+    const existingFollowRequest = await prisma.followRequest.findFirst({
+      where: {
+        senderId: userId,
+        receiverId: currentUserId
+      }
+    });
+
+    if (existingFollowRequest) {
+      await prisma.followRequest.delete({
+        where: {
+          id: existingFollowRequest.id
+        }
+      })
+    }
+  } catch (error) {
+    throw new Error("Something went wrong");
+  }
 }

@@ -9,6 +9,7 @@ import { RxCalendar } from "react-icons/rx"
 import { TbBriefcaseFilled } from "react-icons/tb"
 import UserInfoInteraction from "./UserInfoInteraction"
 import UpdateUser from "./UpdateUser"
+import { DiVim } from "react-icons/di"
 
 const UserInfoCard = async ({ user }: { user: User }) => {
   const createdAtDate = new Date(user.createdAt)
@@ -91,20 +92,17 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             <span>Works at <b>{user.work}.</b></span>
           </div>
         )}
-
-        <div className="flex gap-2 items-center justify-between">
-          {user.website && (
-            <div className="flex items-center gap-1">
-              <IoIosLink size={16} className="text-gray-400 w-4 h-4" />
-              <Link href={user.website} className="text-blue-500">
-                {user.website}
-              </Link>
-            </div>
-          )}
-          <div className="flex items-center gap-1">
-            <RxCalendar size={16} className="text-gray-400 w-4 h-4" />
-            <span>Joined {formattedDate}</span>
+        {user.website && (
+          <div className="flex items-center gap-2">
+            <IoIosLink size={16} className="text-gray-400 w-4 h-4" />
+            <Link href={user.website} className="text-blue-500">
+              {user.website}
+            </Link>
           </div>
+        )}
+        <div className="flex items-center gap-2">
+          <RxCalendar size={16} className="text-gray-400 w-4 h-4" />
+          <span>Joined {formattedDate}</span>
         </div>
         {currentUserId && (currentUserId !== user.id) && (
           <UserInfoInteraction
