@@ -14,6 +14,7 @@ import UpdateButton from "./UpdateButton";
 const UpdateUser = ({ user }: { user: User }) => {
   const [open, setOpen] = useState(false)
   const [cover, setCover] = useState("")
+  // DESC: 第一次提交表单时，这将是您提供的初始状态，而在后续提交中，这将是上次调用操作时的返回值。
   const [state, formAction, isPending] = useActionState(uploadProfile, { success: false, msg: "", errors: undefined });
   const router = useRouter();
   const { showToast } = useToast()
